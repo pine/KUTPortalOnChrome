@@ -2,7 +2,7 @@
 // Firefox 27 / Windows 7 x64
 var USER_AGENT = "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0";
 
-// UserAgent ‚ğ‹U‘•‚·‚é
+// UserAgent ã‚’å½è£…ã™ã‚‹
 chrome.webRequest.onBeforeSendHeaders.addListener(
   function(details){
     for(var i=0; i<details.requestHeaders.length; i++){

@@ -1,6 +1,6 @@
 
-// Firefox 27 / Windows 7 x64
-var USER_AGENT = "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0";
+// Firefox 31 / Windows 8
+var USER_AGENT = "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:31.0) Gecko/20100101 Firefox/31.0";
 
 var PORTAL_ENTER_URL = 'http://portal.kochi-tech.ac.jp/';
 

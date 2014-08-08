@@ -1,7 +1,7 @@
 {
-  "name": "高知工科大学ポータルサイト",
+  "name": "高知工科大学ポータルサイト - KUT Portal on Chrome",
   "description": "高知工科大学ポータルサイトを Chrome から利用可能にします。",
-  "version": "1.1.0.2",
+  "version": "1.2.0.0",
   "manifest_version": 2,
   "icons": {
     "48": "icon48.png",
@@ -10,6 +10,16 @@
   "background": {
     "scripts":["background.js"]
   },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://portal1.kochi-tech.ac.jp/*",
+        "https://portal2.kochi-tech.ac.jp/*"
+      ],
+      "js": ["content_scripts.js"],
+      "run_at": "document_idle"
+    }
+  ],
   "permissions": [
     "webRequest",
     "webRequestBlocking",

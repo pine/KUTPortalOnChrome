@@ -13,8 +13,8 @@
   "content_scripts": [
     {
       "matches": [
-        "https://portal1.kochi-tech.ac.jp/*",
-        "https://portal2.kochi-tech.ac.jp/*"
+        "*://portal1.kochi-tech.ac.jp/*",
+        "*://portal2.kochi-tech.ac.jp/*"
       ],
       "js": ["content_scripts.js"],
       "run_at": "document_idle"
@@ -24,8 +24,8 @@
     "webRequest",
     "webRequestBlocking",
     "cookies",
-    "https://portal1.kochi-tech.ac.jp/*",
-    "https://portal2.kochi-tech.ac.jp/*",
-    "https://idp.kochi-tech.ac.jp/*"
+    "*://portal1.kochi-tech.ac.jp/*",
+    "*://portal2.kochi-tech.ac.jp/*",
+    "*://idp.kochi-tech.ac.jp/*"
   ]
 }

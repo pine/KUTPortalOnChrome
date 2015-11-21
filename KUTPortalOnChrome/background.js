@@ -2,27 +2,25 @@
 // Firefox 33 / Windows 8
 var USER_AGENT = "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:33.0) Gecko/20100101 Firefox/33.0";
 
-var PORTAL_ENTER_URL = 'http://portal.kochi-tech.ac.jp/';
-
 // UserAgent を偽装する
 chrome.webRequest.onBeforeSendHeaders.addListener(
   function(details){
     for(var i = 0; i < details.requestHeaders.length; i++){
       var header = details.requestHeaders[i];
-      
+
       if(header.name == "User-Agent"){
         header.value = USER_AGENT;
         break;
       }
     }
-    
+
     return { requestHeaders: details.requestHeaders };
   },
   {
     urls: [
-      "https://portal1.kochi-tech.ac.jp/*",
-      "https://portal2.kochi-tech.ac.jp/*",
-      "https://idp.kochi-tech.ac.jp/*"
+      "*://portal1.kochi-tech.ac.jp/*",
+      "*://portal2.kochi-tech.ac.jp/*",
+      "*://idp.kochi-tech.ac.jp/*"
     ]
   },
   [
@@ -31,55 +29,46 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
   ]
 );
 
-chrome.webRequest.onHeadersReceived.addListener(
-  function(details){
-    // Cookie を削除
-    
-    // Cookie 削除対象 URL
-    var cookie_urls = [
-      "https://portal1.kochi-tech.ac.jp/",
-      "https://portal2.kochi-tech.ac.jp/",
-      "https://idp.kochi-tech.ac.jp/idp"
-    ];
-    
-    cookie_urls.forEach(function(url){
-      var cookie_details = {
-        url: url
-      };
-      
-      // 全ての Cookie の情報を取得
-      chrome.cookies.getAll(
-        cookie_details,
-        function(cookies){
-          // 全ての Cookie を削除
-          cookies.forEach(function(cookie){
-            chrome.cookies.remove({ url: url, name: cookie.name });
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request.action !== 'logout') { return; }
+
+  // Cookie を削除
+
+  // Cookie 削除対象 URL
+  var cookie_domains = [
+    "portal1.kochi-tech.ac.jp",
+    "portal2.kochi-tech.ac.jp",
+    "idp.kochi-tech.ac.jp"
+  ];
+
+  var removing_count = 0;
+  var removed_count  = 0;
+
+  cookie_domains.forEach(function(domain){
+    // 全ての Cookie の情報を取得
+    chrome.cookies.getAll(
+      { domain: domain },
+      function(cookies){
+
+        // 全ての Cookie を削除
+        cookies.forEach(function(cookie){
+          var remove_detail = {
+            url: "http" + (cookie.secure ? "s" : "") + "://" + cookie.domain + cookie.path,
+            name: cookie.name,
+          };
+
+          removing_count++;
+          chrome.cookies.remove(remove_detail, function () {
+            removed_count++;
+
+            if (removed_count === removing_count) {
+              sendResponse({ message: 'ok' });
+            }
           });
-        }
-      );
-    });
-    
-    // リダイレクト先を変更
-    for(var i = 0; i < details.responseHeaders.length; i++){
-      var header = details.responseHeaders[i];
-      
-      if(header.name == "Location"){
-        header.value = PORTAL_ENTER_URL;
-        break;
+        });
       }
-    }
-    
-    return { responseHeaders: details.responseHeaders };
-  },
-  {
-    urls: [
-      // ログアウトページ
-      "https://portal1.kochi-tech.ac.jp/Portal/logout.aspx",
-      "https://portal2.kochi-tech.ac.jp/Portal/logout.aspx"
-    ]
-  },
-  [
-    "responseHeaders",
-    "blocking"
-  ]
-);
+    );
+  });
+
+  return true;
+});

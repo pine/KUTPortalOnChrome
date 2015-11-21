@@ -1,6 +1,6 @@
 
-// Firefox 33 / Windows 8
-var USER_AGENT = "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:33.0) Gecko/20100101 Firefox/33.0";
+// Firefox 42 / Mac OS X
+var USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:42.0) Gecko/20100101 Firefox/42.0";
 
 // UserAgent を偽装する
 chrome.webRequest.onBeforeSendHeaders.addListener(
